@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+  <plugin-info>
+    <description>${project.description}</description>
+    <version>${project.version}</version>
+    <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+    <param name="plugin-icon">images/pluginIcon.png</param>
+    <param name="plugin-logo">images/pluginLogo.png</param>
+  </plugin-info>
+  <!-- add our i18n resource -->
+  <resource type="i18n" name="i18n" location="recyclebin"/>
+  <!-- add our web resources -->
+  <web-resource key="recyclebin-resources" name="recyclebin Web Resources">
+    <dependency>com.atlassian.auiplugin:ajs</dependency>
+    <resource type="download" name="recyclebin.css" location="/css/recyclebin.css"/>
+    <resource type="download" name="recyclebin.js" location="/js/recyclebin.js"/>
+    <resource type="download" name="images/" location="/images"/>
+    <context>recyclebin</context>
+    <context>com.atlassian.jira.project.reports.page</context>
+  </web-resource>
+  <web-item key="recycle-issue" i18n-name-key="recycle-issue.link.name" name="Recycle this issue" section="operations-delete" weight="20">
+    <label key="recycle-issue.link.name"/>
+    <tooltip key="recycle-issue.link.description"/>
+    <styleClass>trigger-dialog</styleClass>
+    <link linkId="recycle-issue">/secure/RecycleIssue!default.jspa?id=${issueId}</link>
+    <conditions type="AND">
+      <condition class="de.t2consult.atlassian.jira.recyclebin.permissions.UserHasRecyclePermission">
+        <param name="permission">de.t2consult.atlassian.jira.recycleIssueProject</param>
+      </condition>
+      <condition class="de.t2consult.atlassian.jira.recyclebin.permissions.IssueIsAllowedForRecycle">
+        <param name="permission">de.t2consult.atlassian.jira.recycleIssueProject</param>
+      </condition>
+    </conditions>
+  </web-item>
+  <project-permission key="de.t2consult.atlassian.jira.useRecycleBinProject" category="ISSUES" i18n-name-key="permission.useRecycleBin.name" i18n-description-key="permission.useRecycleBin.description" anonymous-allowed="true"/>
+  <project-permission key="de.t2consult.atlassian.jira.recycleIssueProject" category="ISSUES" i18n-name-key="permission.recycleIssue.name" i18n-description-key="permission.recycleIssue.description" anonymous-allowed="true"/>
+  <project-permission key="de.t2consult.atlassian.jira.restoreIssueProject" category="ISSUES" i18n-name-key="permission.restoreIssue.name" i18n-description-key="permission.restoreIssue.description" anonymous-allowed="true"/>
+  <global-permission key="de.t2consult.atlassian.jira.useRecycleBinGlobal" i18n-name-key="permission.useRecycleBin.name" i18n-description-key="permission.useRecycleBin.description" anonymous-allowed="true"/>
+  <global-permission key="de.t2consult.atlassian.jira.recycleIssueGlobal" i18n-name-key="permission.recycleIssue.name" i18n-description-key="permission.recycleIssue.description" anonymous-allowed="true"/>
+  <global-permission key="de.t2consult.atlassian.jira.restoreIssueGlobal" i18n-name-key="permission.restoreIssue.name" i18n-description-key="permission.restoreIssue.description" anonymous-allowed="true"/>
+  <webwork1 key="recycle-bin-webwork-module" name="RecycleBinWebworkModule" i18n-name-key="recycle-bin-webwork-module.name">
+    <description key="recycle-issue-webwork-module.description">The Recycle Issue WebworkModule Plugin</description>
+    <actions>
+      <action name="de.t2consult.atlassian.jira.recyclebin.web.RecycleIssueWebworkModuleAction" alias="RecycleIssue">
+        <view name="input">/templates/recycle-bin-webwork-module/recycle.vm</view>
+        <view name="error">/templates/recycle-bin-webwork-module/error.vm</view>
+      </action>
+      <action name="de.t2consult.atlassian.jira.recyclebin.web.RestoreIssueWebworkModuleAction" alias="RestoreIssue">
+        <view name="input">/templates/recycle-bin-webwork-module/restore.vm</view>
+        <view name="error">/templates/recycle-bin-webwork-module/error.vm</view>
+      </action>
+      <action name="de.t2consult.atlassian.jira.recyclebin.web.DeleteIssueWebworkModuleAction" alias="DeleteIssue">
+        <view name="input">/templates/recycle-bin-webwork-module/delete.vm</view>
+        <view name="error">/templates/recycle-bin-webwork-module/error.vm</view>
+      </action>
+      <action name="de.t2consult.atlassian.jira.recyclebin.web.DeleteAllIssuesWebworkModuleAction" alias="DeleteAllIssues">
+        <view name="input">/templates/recycle-bin-webwork-module/delete-all.vm</view>
+        <view name="error">/templates/recycle-bin-webwork-module/error.vm</view>
+      </action>
+    </actions>
+  </webwork1>
+  <report name="Recycled Issues Report" i18n-name-key="recycled-issues-report.name" key="recycled-issues-report" class="de.t2consult.atlassian.jira.recyclebin.reports.RecycledIssuesReport">
+    <description key="recycled-issues-report.description">The Recycled Issues Report</description>
+    <label key="recycled-issues-report.name"/>
+    <thumbnail cssClass="recyclebin-report-thumbnail"/>
+    <resource type="velocity" name="view" location="/templates/recycled-issues-report/view.vm"/>
+    <properties>
+      <property>
+        <key>pagesize</key>
+        <name>report.RecycledIssuesReport.pagesize</name>
+        <description>report.RecycledIssuesReport.pagesize.description</description>
+        <type>select</type>
+        <default>5</default>
+        <values>
+          <value>
+            <key>10</key>
+            <value>10</value>
+          </value>
+          <value>
+            <key>25</key>
+            <value>25</value>
+          </value>
+          <value>
+            <key>50</key>
+            <value>50</value>
+          </value>
+          <value>
+            <key>100</key>
+            <value>100</value>
+          </value>
+        </values>
+      </property>
+    </properties>
+  </report>
+  <web-item name="ViewRecyledIssuesReportWebItem" i18n-name-key="view-recyled-issues-report-web-item.name" key="view-recyled-issues-report-web-item" section="jira.project.sidebar.plugins.navigation" weight="1000">
+    <description key="view-recyled-issues-report-web-item.description">Recycle Bin</description>
+    <param name="tabType" value="PROJECT_TAB"/>
+    <param name="iconClass" value="aui-icon aui-icon-large aui-iconfont-build"/>
+    <label key="view-recyled-issues-report-web-item.label"/>
+    <link linkId="view-recyled-issues-report-web-item-link">/secure/ConfigureReport.jspa?reportKey=de.t2consult.atlassian.jira.recyclebin%3Arecycled-issues-report</link>
+    <condition class="de.t2consult.atlassian.jira.recyclebin.permissions.UserHasRestorePermission">
+      <param name="permission">de.t2consult.atlassian.jira.restoreIssueProject</param>
+    </condition>
+  </web-item>
+  <web-panel name="RecycleBinBanner" i18n-name-key="recycle-bin-banner.name" key="recycle-bin-banner" location="jira-banner" weight="1000">
+    <description key="recycle-bin-banner.description">The RecycleBinBanner Plugin</description>
+    <resource name="view" type="velocity" location="templates/recycle-bin-banner/banner.vm"/>
+    <context-provider class="de.t2consult.atlassian.jira.recyclebin.web.RecycleBinBannerContextProvider"/>
+  </web-panel>
+  <web-item name="recycleBinAdminItem" i18n-name-key="recycle-bin-admin-item.name" key="recycle-bin-admin-item" section="system.admin/globalsettings" weight="1000">
+    <description key="recycle-bin-admin-item.description">The recycleBinAdminItem Plugin</description>
+    <label key="recycle-bin-admin-item.name"/>
+    <link linkId="recycle-bin-admin-item-link">/secure/admin/plugins/handler/RecycleBinConfigurationModuleAction.jspa</link>
+  </web-item>
+  <webwork1 key="recycle-bin-configuration-module" name="RecycleBinConfigurationModule" i18n-name-key="recycle-bin-configuration-module.name">
+    <description key="recycle-bin-configuration-module.description">The RecycleBinConfigurationModule Plugin</description>
+    <actions>
+      <action name="de.t2consult.atlassian.jira.recyclebin.jira.webwork.RecycleBinConfigurationModuleAction" alias="RecycleBinConfigurationModuleAction">
+        <view name="input">/templates/recycle-bin-admin/recycleBinAdminConfig.vm</view>
+      </action>
+    </actions>
+  </webwork1>
+</atlassian-plugin>

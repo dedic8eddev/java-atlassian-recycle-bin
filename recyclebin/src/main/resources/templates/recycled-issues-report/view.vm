@@ -1,0 +1,62 @@
+#disable_html_escaping()
+#* @vtlvariable name="issues" type="java.util.Collection<com.atlassian.jira.issue.Issue>" *#
+<style>
+
+</style>
+<link rel="stylesheet" href="$baseUrl/download/resources/de.t2consult.atlassian.jira.recyclebin:recyclebin-resources/recyclebin.css" />
+
+#macro(issueIcon $issueType)<img src="$issueType.getCompleteIconUrl()"
+                             title="$issueType.getNameTranslation() - $issueType.getDescTranslation() ">#end
+<div class="top-section">
+    <h3>$i18n.getText("recycle-bin-banner.total-count"): $totalCount</h3>
+    #if($hasDeletePermission)
+        <button><a href="$baseUrl/secure/DeleteAllIssues!default.jspa" class="trigger-dialog restore-button">$i18n.getText("dialog.delete-all-confirmation-button")</a></button>
+    #end
+</div>
+<table width="100%">
+<tr class="rowHeader">
+    <th></th>
+    <th>$i18n.getText("recycle-bin-banner.key")</th>
+    <th>$i18n.getText("recycle-bin-banner.summary")</th>
+    <th>$i18n.getText("recycle-bin-banner.actions")</th>
+</tr>
+    #foreach($issue in $issues)
+    <tr class="projectRow">
+        <td class="issue-type">#issueIcon($issue.getIssueType())</td>
+        <td class="issue-key">
+            $issue.key
+        </td>
+        <td class="issue-summary">$issue.summary</td>
+        <td class="issue-actions">
+            <div class="issue-actions-container">
+                <button class="issue-action-button"><a href="$baseUrl/secure/RestoreIssue!default.jspa?id=$issue.id" class="trigger-dialog restore-button">$i18n.getText("dialog.restore-confirmation-button")</a></button>
+            #if($hasDeletePermission)
+                <button class="issue-action-button"><a href="$baseUrl/secure/DeleteIssue!default.jspa?id=$issue.id" class="trigger-dialog restore-button">$i18n.getText("dialog.delete-confirmation-button")</a></button>
+            #end
+            </div>
+        </td>
+        <!--<td>issue.updated</td>-->
+    </tr>
+    #end
+</table>
+
+$i18n.getText("report.RecycledIssuesReport.page"):
+#foreach($i in [0..$totalPages])
+
+    #set ($fullURL=$req.getRequestURI()$+'?'+$req.getQueryString())
+    #if(!$fullURL.contains("page="))
+        #set($fullURL=$fullURL+"&page=0")
+    #end
+
+    #set ($displayedPage=$i+1)
+    #set ($currentPageString="page=$currentPage")
+    #set ($generatedPageString="page=$i")
+
+    #if($currentPage==$i)
+        #set($style='style="font-weight: bold"')
+    #else
+        #set($style='')
+    #end
+
+    <a href='$fullURL.replace($currentPageString,$generatedPageString)' $style>$displayedPage</a>
+#end

@@ -1,0 +1,8 @@
+#if($displayBanner)
+    <div class="aui-message aui-message-$errorClass">
+        <p class="title">
+            <strong>$bannerMessageTitle</strong>
+        </p>
+        <p>$bannerMessage</p>
+    </div>
+#end

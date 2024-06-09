@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>Recycle Bin</title>
+    <meta name="decorator" content="atl.admin">
+    <style>
+        #jqlFilterFront {
+            width: 100%;
+        }
+    </style>
+  </head>
+  <body>
+    <h1>Recycle Bin</h1>
+    <form
+      id="admin" class="aui"
+      onsubmit="doSubmit()"
+      action="${req.contextPath}/secure/admin/plugins/handler/RecycleBinConfigurationModuleAction.jspa" method="POST"
+    >
+      
+
+      <div class="field-group">
+          <aui-label for="jqlFilterFront">JQL-Filter:</aui-label>
+          <input class="input" name="jqlFilterFront" id="jqlFilterFront" value="$jqlFilterFront"/>
+          #if (!$action.getIsJqlFilterValid())
+              <div class="error field-group__description">JQL-Filter: is not valid</div>
+          #end
+      </div>
+
+      <div class="field-group">
+          <input type="submit" value="Save" class="button">
+      </div>
+    </form>
+  </body>
+</html>

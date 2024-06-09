@@ -1,0 +1,45 @@
+body .recyclebin-report-thumbnail:before {
+    background-repeat: no-repeat;
+    background-image: url(images/reportLogo.png);
+}
+
+.issue-actions {
+    width: 80px;
+    text-align: center;
+}
+
+.issue-action-button {
+    margin: 0 0.1rem;
+}
+
+.issue-actions-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.issue-key {
+    width: 150px;
+    text-align: center;
+}
+
+.issue-summary {
+    padding-left: 0.5rem;
+}
+
+.issue-type {
+    width: 30px;
+    text-align: center;
+}
+
+.restore-button {
+    color: initial;
+    text-decoration: none !important;
+}
+
+.top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}

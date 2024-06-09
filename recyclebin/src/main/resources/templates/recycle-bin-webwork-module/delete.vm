@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>$action.getText("dialog.delete-issue")</title>
+        <meta name="decorator" content="alt.general"/>
+    </head>
+    <body class="aui">
+        #if ($action.hasAnyErrors())
+        <div class="aui-message error">
+            <h4>$action.getText("dialog.delete-issue-failed")</h4>
+            <ul>
+            #foreach ($error in $action.getErrorMessages())
+                <li>$action.getText($error)</li>
+            #end
+            #foreach ($error in $action.errors)
+                <li>$error</li>
+            #end
+            </ul>
+        </div>
+        #end
+
+        <h2>$action.getText("dialog.delete-issue")</h2>
+        <form class="aui" name="delete-issue" action="$action.getBaseUrl()/secure/DeleteIssue.jspa?id=$action.getIssueId()" method="post">
+            <div class="form-body">
+            $action.getText("dialog.delete-confirmation-description")
+                <div class="hidden">
+                    <input type="hidden" name="atl_token" value="$atl_token"/>
+                </div>
+            </div>
+		    <div class="buttons-container form-footer">
+				<div class="buttons">
+					<input class="aui-button" id="delete-issue-submit" name="Delete" type="submit" value="$action.getText("dialog.delete-confirmation-button")" accesskey="S" title="$action.getText("dialog.press-alt-shift-submit-form")"/>
+					<a title="$action.getText("dialog.press-alt-shift-cancel")" id="delete-issue-cancel" class="aui-button aui-button-link cancel" accesskey="`">$action.getText("dialog.delete-cancel-button")</a>
+				</div>
+			</div>
+        </form>
+    </body>
+</html>
+

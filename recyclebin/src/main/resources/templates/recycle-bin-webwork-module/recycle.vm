@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>$action.getText("dialog.recycle-issue")</title>
+        <meta name="decorator" content="alt.general"/>
+    </head>
+    <body class="aui">
+        #if ($action.hasAnyErrors())
+        <div class="aui-message error">
+            <h4>$action.getText("dialog.recycle-issue-failed")</h4>
+            <ul>
+            #foreach ($error in $action.getErrorMessages())
+                <li>$action.getText($error)</li>
+            #end
+            #foreach ($error in $action.errors)
+                <li>$error</li>
+            #end
+            </ul>
+        </div>
+        #end
+
+        <h2>$action.getText("dialog.recycle-issue")</h2>
+        <form class="aui" name="recycle-issue" action="$action.getBaseUrl()/secure/RecycleIssue.jspa?id=$action.getIssueId()" method="post">
+            <div class="form-body">
+            $action.getText("dialog.recycle-confirmation-description")
+                <div class="hidden">
+                    <input type="hidden" name="atl_token" value="$atl_token"/>
+                </div>
+            </div>
+		    <div class="buttons-container form-footer">
+				<div class="buttons">
+					<input class="aui-button" id="recycle-issue-submit" name="Recycle" type="submit" value="$action.getText("dialog.recycle-confirmation-button")" accesskey="S" title="$action.getText("dialog.press-alt-shift-submit-form")"/>
+					<a title="$action.getText("dialog.press-alt-shift-cancel")" id="recycle-issue-cancel" class="aui-button aui-button-link cancel" accesskey="`">$action.getText("dialog.delete-cancel-button")</a>
+				</div>
+			</div>
+        </form>
+    </body>
+</html>
+
